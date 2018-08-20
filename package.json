@@ -1,6 +1,6 @@
 {
   "name": "hienajs",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -42,6 +42,5 @@
     "README.md"
   ],
   "dependencies": {
-    
   }
 }
