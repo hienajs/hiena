@@ -30,7 +30,7 @@ export default {
   },
   socket: false,
   cache: {
-    enable: true,
+    enable: false,
     time: 0.2
   }
 }
