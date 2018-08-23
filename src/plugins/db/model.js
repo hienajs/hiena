@@ -91,6 +91,29 @@ export function SequelizeModel (con, name, fields, options) {
     return definition.findAll(options)
   }
 
+  definition.findWithValid = async function (where) {
+    let reg = await definition.findOne({ where })
+    if (!reg) throw new Error('Registro não encontrado!')
+    return reg
+  }
+
+  definition.list = async function (filter, order, options) {
+    const list = await definition.findQuery(filter, order, options)
+    const registros = await definition.count(filter)
+    const pages = Math.ceil(registros / filter.itensPorPagina)
+    return { registros, pages, list }
+  }
+
+  definition.edit = async function (where, dados) {
+    let reg = await definition.findWithValid(where)
+    return reg.update(dados)
+  }
+
+  definition.del = async function (where) {
+    let reg = await definition.findWithValid(where)
+    return reg.destroy()
+  }
+
   definition.prototype.newField = function (field, value, date = false) {
     if (typeof (value) === 'undefined' || value == null || value === '') return false
     if (typeof (this[field]) === 'undefined' || this[field] == null || this[field] === '') {
