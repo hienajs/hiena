@@ -1,1 +1,1 @@
-# hiena
+# HienaJS
