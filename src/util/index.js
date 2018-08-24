@@ -9,6 +9,7 @@ import * as request from './request'
 import * as string from './string'
 import * as token from './token'
 import * as validate from './validate'
+import { addErrorLog } from '../db/log'
 
 export default {
   date,
@@ -21,5 +22,6 @@ export default {
   object,
   request,
   token,
-  validate
+  validate,
+  addErrorLog
 }
