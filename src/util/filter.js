@@ -95,7 +95,7 @@ export class Filter {
   like (valor, prefix = '%') {
     if (!valor) valor = ''
     valor = prefix + valor.replace(new RegExp(' ', 'g'), '%') + '%'
-    return { $like: valor }
+    return { $iLike: valor }
   }
 
   between (valor1, valor2) {

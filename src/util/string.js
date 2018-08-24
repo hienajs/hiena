@@ -31,6 +31,11 @@ export function lower (value) {
   return value.toString().toLocaleLowerCase()
 }
 
+export function upper (value) {
+  if (!value) return null
+  return value.toString().toUpperCase()
+}
+
 export function capitalize (value) {
   if (!value) return ''
   let array = value.toString().toLocaleLowerCase().split(' ')
