@@ -3,18 +3,33 @@ import app from './app'
 import db from '../db/'
 import { createControllerAndMixins, startService } from './modules'
 
+let dbExecuted = false
+let globalExecute = false
+
 export async function getObjects (context) {
-  let { models, modules, execute } = await db(context)
+  let { cache, models, modules, execute } = await db(context)
+  context.cache = cache
   const { controllers, mixins } = createControllerAndMixins(context, models, modules)
-  if (cluster.isMaster) await execute()
+  globalExecute = execute
   return { models, modules, execute, controllers, mixins, context }
 }
 
+export async function updateDB () {
+  if ((!dbExecuted) && globalExecute) {
+    if (cluster.isMaster) {
+      await globalExecute()
+      dbExecuted = true
+    }
+  }
+}
+
 export async function initServices (objects) {
+  await updateDB()
   return cluster.isMaster ? startService(objects.context, objects.controllers, objects.mixins) : null
 }
 
 export async function initRest (objects) {
+  await updateDB()
   if (cluster.isMaster && objects.context.config.numProcess > 1) {
     for (let i = 0; i < objects.context.config.numProcess; i++) cluster.fork()
   } else {
@@ -27,6 +42,7 @@ export async function initRest (objects) {
 }
 
 export async function initRestAndService (objects) {
+  await updateDB()
   await initServices(objects)
   return initRest(objects)
 }
