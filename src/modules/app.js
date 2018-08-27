@@ -23,10 +23,10 @@ export default function (context, controllers, mixins) {
 
   // Conexão via socket
   let io = null
-  if (context.config.socket) {
+  if (context.config.socket.enable) {
     let io = socketIo(server)
     io.set('transports', ['websocket'])
-    io.adapter(ioRedisAdapter({ host: context.config.redis.host, port: context.config.redis.port }))
+    io.adapter(ioRedisAdapter({ host: context.config.socket.redis.host, port: context.config.socket.redis.port }))
   }
 
   // Middlewares de segurança e transformação

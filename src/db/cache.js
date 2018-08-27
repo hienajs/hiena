@@ -38,7 +38,7 @@ export class CacheControl {
   constructor (config, modulo, filhos = []) {
     this.modulo = modulo
     this.filhos = filhos
-    this.client = redis.createClient({ host: config.redis.host, port: config.redis.port })
+    this.client = redis.createClient({ host: config.cache.redis.host, port: config.cache.redis.port })
     this.time = config.cache.time
   }
 
@@ -126,16 +126,12 @@ export class CacheControl {
   }
 }
 
-const cache = {}
-
-cache.cleanCache = function (config) {
+export const cleanCache = function (config) {
   return new Promise((resolve, reject) => {
-    const client = redis.createClient({ host: config.redis.host, port: config.redis.port })
+    const client = redis.createClient({ host: config.cache.redis.host, port: config.cache.redis.port })
     client.flushdb((err) => {
       if (err) return reject(err)
       return resolve()
     })
   })
 }
-
-export default cache

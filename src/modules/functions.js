@@ -15,7 +15,8 @@ export function mixin (mx, modulo, mixins, context, models, modules) {
         let all = {
           models: myModels,
           config: context.config,
-          mixins
+          mixins,
+          cache: context.cache
         }
         return mx[i](all, ...params)
       }
