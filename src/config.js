@@ -17,10 +17,6 @@ export default {
     url: null,
     db: null
   },
-  redis: {
-    host: '127.0.0.1',
-    port: 6379
-  },
   log: false,
   showSql: false,
   server: {
@@ -28,9 +24,19 @@ export default {
     morgan: true,
     port: 3000
   },
-  socket: false,
+  socket: {
+    enable: false,
+    redis: {
+      host: '127.0.0.1',
+      port: 6379
+    }
+  },
   cache: {
     enable: false,
-    time: 0.2
+    time: 0.2,
+    redis: {
+      host: '127.0.0.1',
+      port: 6379
+    }
   }
 }

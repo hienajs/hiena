@@ -7,7 +7,8 @@ let dbExecuted = false
 let globalExecute = false
 
 export async function getObjects (context) {
-  let { models, modules, execute } = await db(context)
+  let { cache, models, modules, execute } = await db(context)
+  context.cache = cache
   const { controllers, mixins } = createControllerAndMixins(context, models, modules)
   globalExecute = execute
   return { models, modules, execute, controllers, mixins, context }

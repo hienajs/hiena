@@ -1,7 +1,7 @@
 import { Connection } from '../plugins/db/connection'
 import { ExecuteControl } from '../plugins/db/control'
 import { addDbLog } from './log'
-import cache, { CacheControl } from './cache'
+import { CacheControl, cleanCache } from './cache'
 
 export default async function (context) {
   try {
@@ -10,6 +10,7 @@ export default async function (context) {
       addDbLog(context.config, text)
     } })
 
+    let cache = {}
     let models = { con }
     let modules = {}
     let migrations = []
@@ -43,22 +44,18 @@ export default async function (context) {
     })
 
     // Percorre os models para criar associacoes
-    if (context.config.cache.enable) models.cache = cache
-    else models.cache = {}
     Object.keys(models).forEach(e => {
-      if (context.config.cache.enable) models[e].cache = cache[e]
-      else models[e].cache = {}
       if (models[e].associate) models[e].associate(models)
       if (models[e].methods) models[e].methods(models)
     })
 
-    // Clean Cache
-    if (context.config.cache.enable) await cache.cleanCache(context.config)
-
     return {
+      cache,
       models,
       modules,
       async execute () {
+        // Clean Cache
+        if (context.config.cache.enable) await cleanCache(context.config)
         // Controle de Execução
         const controle = new ExecuteControl(con, 'postgres')
         controle.setItens(migrations, seeds, scripts, models)
