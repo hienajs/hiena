@@ -171,11 +171,9 @@ export function idade (date = new Date()) {
   let dia = d.getDate()
 
   let anoDate = date.getFullYear()
-  let mesDate = date.getMonth() + 1
   let diaDate = date.getDate()
-
+  let mesDate = date.getMonth() + 1
   let anos = ano - anoDate
-
-  if (mes < mesDate || (mes === mesDate && dia < diaDate)) anos--
+  if (mes > mesDate || (mes === mesDate && diaDate < dia)) anos--
   return anos < 0 ? 0 : anos
 }
