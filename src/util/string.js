@@ -48,6 +48,12 @@ export function capitalizeFunc (value) {
   return value.charAt(0).toUpperCase() + value.slice(1)
 }
 
+export function tiraSpace (value) {
+  if (!value) return null
+  value = value.split('   ')
+  return value[0]
+}
+
 export function tiraMascara (valor) {
   if (!valor) return ''
   return valor.replace(/[^\d]+/g, '')
