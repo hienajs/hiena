@@ -3,7 +3,7 @@ import { ExecuteControl } from '../plugins/db/control'
 import { addDbLog } from './log'
 import { CacheControl, cleanCache } from './cache'
 
-export default async function (context) {
+export default async function (context, tipo) {
   try {
     let con = Connection(context.config, { logging: (text) => {
       if (context.config.showSql) console.log(text)
@@ -57,7 +57,7 @@ export default async function (context) {
         // Clean Cache
         if (context.config.cache.enable) await cleanCache(context.config)
         // Controle de Execução
-        const controle = new ExecuteControl(con, 'postgres')
+        const controle = new ExecuteControl(con, tipo)
         controle.setItens(migrations, seeds, scripts, models)
         await controle.exec()
       }

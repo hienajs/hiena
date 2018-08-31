@@ -1,5 +1,4 @@
-import mysql from './mysql'
-import postgres from './postgres'
+import create from './create'
 
 export default async function (context) {
   const result = {
@@ -11,20 +10,11 @@ export default async function (context) {
     }
   }
   if (context.config.db.dialect && context.config.db.url) {
-    if (context.config.db.dialect === 'mysql') {
-      let { cache, models, modules, execute } = await mysql(context)
-      result.cache = cache
-      result.models = models
-      result.modules = modules
-      result.execute = execute
-    }
-    if (context.config.db.dialect === 'postgres') {
-      let { cache, models, modules, execute } = await postgres(context)
-      result.cache = cache
-      result.models = models
-      result.modules = modules
-      result.execute = execute
-    }
+    let { cache, models, modules, execute } = await create(context, context.config.db.dialect)
+    result.cache = cache
+    result.models = models
+    result.modules = modules
+    result.execute = execute
   }
 
   return result
