@@ -91,6 +91,18 @@ export class Filter {
     }
   }
 
+  setILike (field) {
+    if (this.queryParams[field]) {
+      this.where[field] = this.iLike(this.queryParams[field])
+    }
+  }
+
+  setILikeInitial (field) {
+    if (this.queryParams[field]) {
+      this.where[field] = this.iLike(this.queryParams[field], '')
+    }
+  }
+
   // Funções de apoio ===================
   like (valor, prefix = '%') {
     if (!valor) valor = ''
