@@ -105,9 +105,9 @@ export function SequelizeModel (con, name, fields, options) {
     return { registros, pages, list }
   }
 
-  definition.edit = async function (where, dados) {
+  definition.edit = async function (where, dados, options = {}) {
     let reg = await definition.findWithValid(where)
-    return reg.update(dados)
+    return reg.update(dados, options)
   }
 
   definition.del = async function (where) {
