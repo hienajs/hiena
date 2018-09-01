@@ -91,8 +91,9 @@ export function SequelizeModel (con, name, fields, options) {
     return definition.findAll(options)
   }
 
-  definition.findWithValid = async function (where) {
-    let reg = await definition.findOne({ where })
+  definition.findWithValid = async function (where, options = {}) {
+    options.where = where
+    let reg = await definition.findOne(options)
     if (!reg) throw new Error('Registro não encontrado!')
     return reg
   }
