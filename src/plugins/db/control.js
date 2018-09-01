@@ -258,17 +258,17 @@ export class ExecuteControl {
   }
 
   async exec () {
-    this.transaction = await this.con.transaction()
+    if (this.dialect === 'postgres') this.transaction = await this.con.transaction()
     try {
       await this.execMigration() // Migration
       await this.execSeed() // Seed
       await this.execScript() // Script
       // Commit
-      await this.transaction.commit()
+      if (this.dialect === 'postgres') await this.transaction.commit()
       await this.trataSequences()
       this.transaction = false
     } catch (e) {
-      await this.transaction.rollback()
+      if (this.dialect === 'postgres') await this.transaction.rollback()
       this.transaction = false
       throw e
     }
