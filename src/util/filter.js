@@ -95,6 +95,12 @@ export class Filter {
   like (valor, prefix = '%') {
     if (!valor) valor = ''
     valor = prefix + valor.replace(new RegExp(' ', 'g'), '%') + '%'
+    return { $like: valor }
+  }
+
+  iLike (valor, prefix = '%') {
+    if (!valor) valor = ''
+    valor = prefix + valor.replace(new RegExp(' ', 'g'), '%') + '%'
     return { $iLike: valor }
   }
 
