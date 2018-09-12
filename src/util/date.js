@@ -174,6 +174,6 @@ export function idade (date = new Date()) {
   let diaDate = date.getDate()
   let mesDate = date.getMonth() + 1
   let anos = ano - anoDate
-  if (mes > mesDate || (mes === mesDate && diaDate < dia)) anos--
+  if (mesDate > mes || (mesDate === mes && diaDate > dia)) anos--
   return anos < 0 ? 0 : anos
 }
