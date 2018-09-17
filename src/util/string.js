@@ -102,6 +102,8 @@ export function utf8Encode (s) {
 }
 
 export function quebra (string, pointer, pos) {
+  string = string.replace(/(\r\n|\n|\r)/gm, '') // remove quebra de linhas
+  string = string.replace(/\s{2,}/g, ' ') // espaçamento duplos
   let array = string.split(pointer)
   return array[pos]
 }
