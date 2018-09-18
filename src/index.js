@@ -1,11 +1,10 @@
 import { DataTypes, fn as sequelizeFn, where as sequelizeWhere, col as sequelizeCol, literal as sequelizeLiteral } from 'sequelize'
 import { createTable, postgresCreateTable, postgresAddIndex, SequelizeModel } from './plugins/db/model'
 import config from './config'
-import util from './util'
 import * as modules from './modules'
+import * as object from './util/object'
 
 export {
-  util,
   DataTypes,
   sequelizeFn,
   sequelizeWhere,
@@ -20,7 +19,7 @@ export {
 export default async function (options = {}) {
   try {
     const context = {
-      config: util.object.merge({}, config, options.config || {})
+      config: object.merge({}, config, options.config || {})
     }
     context.modules = options.modules || {}
     // Pega Objetos em Módulos
