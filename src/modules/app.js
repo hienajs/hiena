@@ -46,6 +46,8 @@ export default function (context, controllers, mixins) {
 
   // Express Join IO
   app.io = io
+  // Pre Flight Enable
+  app.options('*', cors())
   // Routes
   app = startRoute(app, context, controllers, mixins)
 
