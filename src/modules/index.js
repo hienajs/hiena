@@ -24,12 +24,10 @@ export async function updateDB () {
 }
 
 export async function initServices (objects) {
-  await updateDB()
   return cluster.isMaster ? startService(objects.context, objects.controllers, objects.mixins) : null
 }
 
 export async function initRest (objects) {
-  await updateDB()
   if (cluster.isMaster && objects.context.config.numProcess > 1) {
     for (let i = 0; i < objects.context.config.numProcess; i++) cluster.fork()
   } else {
