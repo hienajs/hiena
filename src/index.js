@@ -25,7 +25,10 @@ export default async function (options = {}) {
     // Pega Objetos em Módulos
     let objects = await modules.getObjects(context)
     return {
-      updateDB: () => modules.updateDB(),
+      updateDB: async () => {
+        await modules.updateDB()
+        process.exit()
+      },
       startService: () => modules.initServices(objects),
       startRest: () => modules.initRest(objects),
       startRestAndService: () => modules.initRestAndService(objects)
