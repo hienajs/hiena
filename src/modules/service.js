@@ -66,6 +66,7 @@ function permiteHorario (time) {
   let fim = setHour(time[1])
   let agora = new Date()
   agora.setSeconds(0)
+  if (inicio > fim) fim.setDate(fim.getDate() + 1)
   return agora >= inicio && agora <= fim
 }
 
