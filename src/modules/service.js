@@ -47,18 +47,25 @@ function setHour (time) {
   return horario
 }
 
-function defineAgenda (time, today) {
+function hoje (horario) {
+  let agora = new Date()
+  agora.setSeconds(0)
+  agora.setMilliseconds(0)
+  if (agora.getTime() > horario.getTime()) return false
+  else return true
+}
+
+function defineAgenda (time) {
   let horario = setHour(time)
-  if (!today) horario.setDate(horario.getDate() + 1)
+  if (!hoje(horario)) horario.setDate(horario.getDate() + 1)
   return horario.getTime() - new Date().getTime()
 }
 
-function agendar (config, methods, mixins, time, today = false) {
-  let agendado = defineAgenda(time, today)
+function agendar (config, methods, mixins, time) {
   setTimeout(async () => {
     await executeOne(config, methods, mixins)
     agendar(config, methods, mixins, time)
-  }, agendado)
+  }, defineAgenda(time))
 }
 
 function permiteHorario (time) {
@@ -78,10 +85,10 @@ async function executeRestrito (config, methods, mixins, time) {
   } else restrito(config, methods, mixins, time)
 }
 
-async function restrito (config, methods, mixins, time, today = false) {
+async function restrito (config, methods, mixins, time) {
   setTimeout(() => {
     executeRestrito(config, methods, mixins, time)
-  }, defineAgenda(time[0], today))
+  }, defineAgenda(time[0]))
 }
 
 export function ctrlService (mixins, config) {
@@ -97,14 +104,14 @@ export function ctrlService (mixins, config) {
       if (methods.length > 0) {
         let time = methods.pop()
         if (typeof time !== 'string' && time.length !== 5) time = '00:00'
-        agendar(config, methods, mixins, time, true)
+        agendar(config, methods, mixins, time)
       }
     },
     restrito (...methods) {
       if (methods.length > 0) {
         let time = methods.pop()
         if (time.length !== 2) time = ['23:00', '08:00']
-        restrito(config, methods, mixins, time, true)
+        restrito(config, methods, mixins, time)
       }
     }
   }
