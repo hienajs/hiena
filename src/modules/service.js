@@ -12,6 +12,7 @@ async function compose (methods, mixins) {
     all.mixins = mixins
     data = await methods[x].controller(all)
   }
+
   return data
 }
 
