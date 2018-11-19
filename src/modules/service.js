@@ -40,40 +40,45 @@ function execute (config, methods, mixins, time) {
   }
 }
 
+function setNoSecMil (time) {
+  time.setSeconds(0)
+  time.setMilliseconds(0)
+}
+
 function setHour (time) {
   let horario = new Date()
   horario.setHours(time.substr(0, time.indexOf(':')))
   horario.setMinutes(time.substr(time.indexOf(':') + 1))
-  horario.setSeconds(0)
+  setNoSecMil(horario)
   return horario
 }
 
-function hoje (horario) {
+function hoje (horario, today) {
+  if (today) return true
   let agora = new Date()
-  agora.setSeconds(0)
-  agora.setMilliseconds(0)
+  setNoSecMil(agora)
   if (agora.getTime() > horario.getTime()) return false
   else return true
 }
 
-function defineAgenda (time) {
+function defineAgenda (time, today) {
   let horario = setHour(time)
-  if (!hoje(horario)) horario.setDate(horario.getDate() + 1)
+  if (!hoje(horario, today)) horario.setDate(horario.getDate() + 1)
   return horario.getTime() - new Date().getTime()
 }
 
-function agendar (config, methods, mixins, time) {
+function agendar (config, methods, mixins, time, today = false) {
   setTimeout(async () => {
     await executeOne(config, methods, mixins)
     agendar(config, methods, mixins, time)
-  }, defineAgenda(time))
+  }, defineAgenda(time, today))
 }
 
 function permiteHorario (time) {
   let inicio = setHour(time[0])
   let fim = setHour(time[1])
   let agora = new Date()
-  agora.setSeconds(0)
+  setNoSecMil(agora)
   if (inicio > fim) fim.setDate(fim.getDate() + 1)
   return agora >= inicio && agora <= fim
 }
@@ -86,10 +91,11 @@ async function executeRestrito (config, methods, mixins, time) {
   } else restrito(config, methods, mixins, time)
 }
 
-async function restrito (config, methods, mixins, time) {
+async function restrito (config, methods, mixins, time, today = false) {
+  let tempo = defineAgenda(time[0], today)
   setTimeout(() => {
     executeRestrito(config, methods, mixins, time)
-  }, defineAgenda(time[0]))
+  }, tempo)
 }
 
 export function ctrlService (mixins, config) {
@@ -105,14 +111,14 @@ export function ctrlService (mixins, config) {
       if (methods.length > 0) {
         let time = methods.pop()
         if (typeof time !== 'string' && time.length !== 5) time = '00:00'
-        agendar(config, methods, mixins, time)
+        agendar(config, methods, mixins, time, true)
       }
     },
     restrito (...methods) {
       if (methods.length > 0) {
         let time = methods.pop()
         if (time.length !== 2) time = ['23:00', '08:00']
-        restrito(config, methods, mixins, time)
+        restrito(config, methods, mixins, time, true)
       }
     }
   }
