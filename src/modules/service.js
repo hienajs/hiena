@@ -38,17 +38,17 @@ function execute (config, methods, mixins, time) {
   }
 }
 
-function defineAgenda (time) {
-  let amanha = new Date()
-  amanha.setDate(amanha.getDate() + 1)
-  amanha.setHours(time.substr(0, time.indexOf(':')))
-  amanha.setMinutes(time.substr(time.indexOf(':') + 1))
-  amanha.setSeconds(0)
-  return amanha.getTime() - new Date().getTime()
+function defineAgenda (time, today) {
+  let horario = new Date()
+  horario.setHours(time.substr(0, time.indexOf(':')))
+  horario.setMinutes(time.substr(time.indexOf(':') + 1))
+  horario.setSeconds(0)
+  if (!today) horario.setDate(horario.getDate() + 1)
+  return horario.getTime() - new Date().getTime()
 }
 
-function agendar (config, methods, mixins, time) {
-  let agendado = defineAgenda(time)
+function agendar (config, methods, mixins, time, today = false) {
+  let agendado = defineAgenda(time, today)
   setTimeout(async () => {
     await executeOne(config, methods, mixins)
     agendar(config, methods, mixins, time)
@@ -68,7 +68,7 @@ export function ctrlService (mixins, config) {
       if (methods.length > 0) {
         let time = methods.pop()
         if (typeof time !== 'string' && time.length !== 5) time = '00:00'
-        agendar(config, methods, mixins, time)
+        agendar(config, methods, mixins, time, true)
       }
     }
   }

@@ -31,8 +31,8 @@ export default function (context, controllers, mixins) {
 
   // Middlewares de segurança e transformação
   app.use(cors())
-  app.use(bodyParser.urlencoded({ extended: true }))
-  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ limit: '500mb', extended: true }))
+  app.use(bodyParser.json({ limit: '500mb' }))
   app.use(helmet.frameguard())
   app.use(helmet.xssFilter())
   app.use(helmet.noSniff())
