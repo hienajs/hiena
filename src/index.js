@@ -44,17 +44,28 @@ export default async function (options = {}) {
     context.modules = options.modules || {}
     // Pega Objetos em Módulos
     let objects = await modules.getObjects(context)
-    // Threads
-    context.thread = thread(objects, options)
     // Acoes
     let acoes = {
       updateDB: async () => {
+        // Threads
         await modules.updateDB()
         process.exit()
       },
-      startService: () => modules.initServices(objects),
-      startRest: () => modules.initRest(objects),
-      startRestAndService: () => modules.initRestAndService(objects)
+      startService: () => {
+        // Threads
+        context.thread = thread(objects, options)
+        modules.initServices(objects)
+      },
+      startRest: () => {
+        // Threads
+        context.thread = thread(objects, options)
+        modules.initRest(objects)
+      },
+      startRestAndService: () => {
+        // Threads
+        context.thread = thread(objects, options)
+        modules.initRestAndService(objects)
+      }
     }
 
     switch (context.action) {
