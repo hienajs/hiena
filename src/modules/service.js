@@ -7,6 +7,7 @@ async function compose (methods, mixins) {
   for (const x in methods) {
     all.models = methods[x].models
     all.config = methods[x].context.config
+    all.thread = methods[x].context.thread
     all.cache = methods[x].context.cache
     all.params = methods[x].params
     all.mixins = mixins

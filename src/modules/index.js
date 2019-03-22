@@ -28,7 +28,7 @@ export async function initServices (objects) {
 }
 
 export async function initRest (objects) {
-  if (cluster.isMaster && objects.context.config.numProcess > 1) {
+  if (cluster.isMaster && objects.context.config.process === 'multiple' && objects.context.config.numProcess > 1) {
     for (let i = 0; i < objects.context.config.numProcess; i++) cluster.fork()
   } else {
     let instance = app(objects.context, objects.controllers, objects.mixins)
