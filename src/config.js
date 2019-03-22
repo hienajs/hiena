@@ -1,6 +1,8 @@
 export default {
   env: 'development',
+  main: 'index.js',
   dirname: __dirname,
+  process: 'unique', // multiple - unique
   numProcess: 1,
   db: {
     dialect: 'mysql',

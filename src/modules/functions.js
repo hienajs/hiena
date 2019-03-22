@@ -15,6 +15,7 @@ export function mixin (mx, modulo, mixins, context, models, modules) {
         let all = {
           models: myModels,
           config: context.config,
+          thread: context.thread,
           mixins,
           cache: context.cache
         }
